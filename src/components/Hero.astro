@@ -1,0 +1,81 @@
+---
+// Compact, friendly hero used on the homepage and section landing pages.
+import { LinkButton } from '@astrojs/starlight/components';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { title = data.title, tagline, actions = [] } = data.hero || {};
+const eyebrow = (data as { eyebrow?: string }).eyebrow;
+---
+
+<div class="kb-hero">
+	{eyebrow && <p class="kb-eyebrow">{eyebrow}</p>}
+	<h1 id="_top" data-page-title set:html={title} />
+	{tagline && <p class="kb-tagline" set:html={tagline} />}
+	{
+		actions.length > 0 && (
+			<div class="kb-actions">
+				{actions.map(({ attrs = {}, icon, link: href, text, variant }) => (
+					<LinkButton {href} {variant} icon={icon?.name} {...attrs}>
+						{text}
+					</LinkButton>
+				))}
+			</div>
+		)
+	}
+</div>
+
+<style>
+	.kb-hero {
+		position: relative;
+		overflow: hidden;
+		margin-top: 1rem;
+		padding: clamp(1.75rem, 5vw, 3.5rem) clamp(1.25rem, 5vw, 3.5rem);
+		border-radius: var(--kb-radius-lg);
+		background: var(--kb-hero-bg);
+	}
+	/* Decorative warm circle (pure CSS, no image assets). */
+	.kb-hero::after {
+		content: '';
+		position: absolute;
+		inset-inline-end: -4rem;
+		inset-block-start: -4rem;
+		width: 14rem;
+		height: 14rem;
+		border-radius: 50%;
+		background: var(--kb-warm);
+		opacity: 0.22;
+		pointer-events: none;
+	}
+	.kb-eyebrow {
+		margin: 0 0 0.5rem;
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--sl-color-text-accent);
+	}
+	h1 {
+		position: relative;
+		margin: 0;
+		max-width: 22ch;
+		font-size: clamp(2rem, 1.2rem + 3.5vw, 3.25rem);
+		line-height: 1.1;
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		color: var(--sl-color-white);
+	}
+	.kb-tagline {
+		position: relative;
+		margin: 1rem 0 0;
+		max-width: 52ch;
+		font-size: clamp(1.05rem, 1rem + 0.5vw, 1.3rem);
+		color: var(--sl-color-gray-2);
+	}
+	.kb-actions {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 1.75rem;
+	}
+</style>

@@ -1,0 +1,84 @@
+/*
+ * EUDI Wallet RP Knowledge Base brand theme.
+ * Primary: "Union Blue" #1E3A8A (deep blue) · Warm accent: "Marigold" #F2B33D.
+ * Font: Figtree (self-hosted via @fontsource-variable/figtree, SIL OFL), system-ui fallback.
+ */
+
+:root {
+	--kb-blue: #1e3a8a;
+	--kb-warm: #f2b33d;
+	--kb-radius-lg: 1.25rem;
+	--kb-top-h: 3.75rem;
+	--kb-subnav-h: 3rem;
+
+	--sl-font: 'Figtree Variable', system-ui;
+	--sl-nav-height: calc(var(--kb-top-h) + var(--kb-subnav-h));
+
+	/* Dark theme (Starlight default) */
+	--sl-color-accent-low: #15214a;
+	--sl-color-accent: #5b82ec;
+	--sl-color-accent-high: #c3d3fb;
+	--kb-hero-bg: linear-gradient(135deg, #16224a 0%, #1b1f2e 100%);
+	--kb-card-bg: var(--sl-color-gray-6);
+	--kb-card-border: var(--sl-color-gray-5);
+	--kb-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+	--kb-shadow-lg: 0 12px 28px rgb(0 0 0 / 0.45);
+	--kb-warm-soft: #4a3610;
+	--kb-warm-ink: #ffd88a;
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: #dce5fb;
+	--sl-color-accent: #1e3a8a;
+	--sl-color-accent-high: #132659;
+	--kb-hero-bg: linear-gradient(135deg, #e6edfc 0%, #f6f8fe 100%);
+	--kb-card-bg: #fff;
+	--kb-card-border: #e2e6ef;
+	--kb-shadow-sm: 0 1px 3px rgb(16 24 64 / 0.06);
+	--kb-shadow-lg: 0 14px 30px rgb(16 24 64 / 0.12);
+	--kb-warm-soft: #fdf0d2;
+	--kb-warm-ink: #7a4d00;
+}
+
+@media (min-width: 50rem) {
+	:root {
+		--kb-top-h: 4.25rem;
+		--kb-subnav-h: 3.25rem;
+	}
+}
+
+/* Header: our Header component manages its own two rows. */
+.page > .header {
+	padding-block: 0;
+}
+.sl-menu-button {
+	top: calc((var(--kb-top-h) - var(--sl-menu-button-size)) / 2);
+}
+
+/* Wider canvas on card-based landing pages (splash template with hero). */
+:root[data-has-hero]:not([data-has-sidebar]) {
+	--sl-content-width: 72rem;
+}
+
+/* Friendlier, bolder headings in guide pages. */
+.sl-markdown-content :is(h1, h2, h3) ,
+h1#_top {
+	font-weight: 800;
+	letter-spacing: -0.01em;
+}
+
+/* Rounded buttons. */
+.sl-link-button {
+	border-radius: 999px;
+	font-weight: 700;
+}
+
+/* Rounded asides to match the cards. */
+.starlight-aside {
+	border-radius: 0.9rem;
+}
+
+/* Rounder search button. */
+site-search button[data-open-modal] {
+	border-radius: 999px;
+}

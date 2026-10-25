@@ -1,0 +1,100 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+
+interface Props {
+	title: string;
+	description: string;
+	href: string;
+	icon?: Parameters<typeof Icon>[0]['name'];
+	more?: string;
+	/** Small status pill, e.g. "Coming soon". */
+	badge?: string;
+}
+const { title, description, href, icon, more = 'More', badge } = Astro.props;
+---
+
+<a class="kb-card" href={href}>
+	<div class="kb-card-top">
+		{icon && <span class="kb-card-icon"><Icon name={icon} size="1.6rem" /></span>}
+		{badge && <span class="kb-badge">{badge}</span>}
+	</div>
+	<h3>{title}</h3>
+	<p>{description}</p>
+	<span class="kb-more">{more}<Icon name="right-arrow" size="1.15rem" /></span>
+</a>
+
+<style>
+	.kb-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		height: 100%;
+		padding: 1.6rem 1.6rem 1.4rem;
+		border: 1px solid var(--kb-card-border);
+		border-radius: var(--kb-radius-lg);
+		background: var(--kb-card-bg);
+		box-shadow: var(--kb-shadow-sm);
+		color: var(--sl-color-white);
+		text-decoration: none;
+		transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+	}
+	.kb-card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--kb-shadow-lg);
+		border-color: var(--sl-color-text-accent);
+	}
+	.kb-card:focus-visible {
+		outline: 3px solid var(--kb-warm);
+		outline-offset: 3px;
+	}
+	.kb-card-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 1rem;
+	}
+	.kb-card-icon {
+		display: grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 0.9rem;
+		background: var(--sl-color-accent-low);
+		color: var(--sl-color-text-accent);
+	}
+	.kb-badge {
+		padding: 0.2rem 0.65rem;
+		border-radius: 999px;
+		background: var(--kb-warm-soft);
+		color: var(--kb-warm-ink);
+		font-size: var(--sl-text-xs);
+		font-weight: 700;
+	}
+	h3 {
+		margin: 0.4rem 0 0;
+		font-size: 1.3rem;
+		font-weight: 750;
+		line-height: 1.25;
+		color: var(--sl-color-white);
+	}
+	p {
+		flex-grow: 1;
+		margin: 0;
+		color: var(--sl-color-gray-2);
+		line-height: 1.5;
+	}
+	.kb-more {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: 0.4rem;
+		font-weight: 700;
+		color: var(--sl-color-text-accent);
+	}
+	.kb-card:hover .kb-more :global(svg) {
+		transform: translateX(3px);
+	}
+	.kb-more :global(svg) {
+		transition: transform 0.15s;
+	}
+</style>

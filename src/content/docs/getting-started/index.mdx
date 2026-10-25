@@ -1,0 +1,19 @@
+---
+title: Getting started
+description: New here? Start with the basics of this knowledge base.
+template: splash
+eyebrow: Getting started
+hero:
+  title: Getting started
+  tagline: New here? Start with the basics of this knowledge base.
+---
+
+import TaskCard from '../../../components/TaskCard.astro';
+import TaskCardGrid from '../../../components/TaskCardGrid.astro';
+
+<TaskCardGrid heading="Choose a topic">
+	<TaskCard title="Overview" description="An introduction to this knowledge base and what it will cover." href="/getting-started/overview/" icon="rocket" badge="Coming soon" />
+	<TaskCard title="How to use this site" description="Find your way around the sections, guides and glossary." href="/getting-started/how-to-use/" icon="open-book" badge="Coming soon" />
+</TaskCardGrid>
+
+[← Back to all topics](/)

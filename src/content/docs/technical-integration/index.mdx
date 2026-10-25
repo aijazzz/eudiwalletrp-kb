@@ -1,0 +1,20 @@
+---
+title: Technical integration
+description: Connect your service to the EUDI Wallet, from protocols to testing.
+template: splash
+eyebrow: Technical integration
+hero:
+  title: Technical integration
+  tagline: Connect your service to the EUDI Wallet, from protocols to testing.
+---
+
+import TaskCard from '../../../components/TaskCard.astro';
+import TaskCardGrid from '../../../components/TaskCardGrid.astro';
+
+<TaskCardGrid heading="Choose a topic">
+	<TaskCard title="OpenID4VP" description="Request and verify credentials from the wallet." href="/technical-integration/openid4vp/" icon="seti:config" badge="Coming soon" />
+	<TaskCard title="Credential formats" description="The credential formats a relying party may need to handle." href="/technical-integration/credential-formats/" icon="seti:json" badge="Coming soon" />
+	<TaskCard title="Testing your integration" description="Ways to test your integration before going live." href="/technical-integration/testing/" icon="laptop" badge="Coming soon" />
+</TaskCardGrid>
+
+[← Back to all topics](/)

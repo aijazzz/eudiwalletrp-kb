@@ -2,37 +2,28 @@
 title: EUDI Wallet Relying Party Knowledge Base
 description: A knowledge base for relying parties integrating with the European Digital Identity (EUDI) Wallet.
 template: splash
+eyebrow: Welcome
 hero:
-  tagline: A knowledge base for organisations that want to accept the European Digital Identity (EUDI) Wallet as relying parties.
+  title: Accepting the EUDI Wallet? Start here.
+  tagline: A friendly knowledge base for organisations that want to accept the European Digital Identity Wallet as relying parties.
   actions:
     - text: Get started
-      link: /getting-started/overview/
+      link: /getting-started/
       icon: right-arrow
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import TaskCard from '../../components/TaskCard.astro';
+import TaskCardGrid from '../../components/TaskCardGrid.astro';
 
-:::note
-This site is under construction. Sections below are placeholders and will be filled in over time.
+<TaskCardGrid heading="What would you like to know?">
+	<TaskCard title="Getting started" description="New here? Learn what this knowledge base covers and how to use it." href="/getting-started/" icon="rocket" />
+	<TaskCard title="Register as a relying party" description="Guidance on relying party registration, step by step." href="/registration-guide/" icon="document" />
+	<TaskCard title="National trackers" description="Follow implementation status across EU member states." href="/national-trackers/" icon="list-format" />
+	<TaskCard title="Legal & regulatory" description="Understand eIDAS 2.0 and related rules in plain language." href="/legal-regulatory/" icon="open-book" />
+	<TaskCard title="Technical integration" description="Connect your service using OpenID4VP and related standards." href="/technical-integration/" icon="seti:config" />
+	<TaskCard title="Glossary" description="Look up the key terms used across this knowledge base." href="/glossary/" icon="information" />
+</TaskCardGrid>
+
+:::note[Under construction]
+This site is new. The guides behind these cards are placeholders and will be filled in over time.
 :::
-
-<CardGrid>
-	<Card title="Getting started" icon="rocket">
-		[Overview](/getting-started/overview/) of what this knowledge base will cover. *(Coming soon)*
-	</Card>
-	<Card title="Registration guide" icon="document">
-		[Relying party registration](/registration-guide/). *(Coming soon)*
-	</Card>
-	<Card title="National trackers" icon="list-format">
-		[Member-state implementation status](/national-trackers/). *(Coming soon)*
-	</Card>
-	<Card title="Legal & regulatory" icon="open-book">
-		[eIDAS 2.0 and related regulation](/legal-regulatory/). *(Coming soon)*
-	</Card>
-	<Card title="Technical integration" icon="seti:config">
-		[OpenID4VP and related protocols](/technical-integration/). *(Coming soon)*
-	</Card>
-	<Card title="Glossary" icon="information">
-		[Key terms](/glossary/). *(Coming soon)*
-	</Card>
-</CardGrid>

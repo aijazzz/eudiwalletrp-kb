@@ -1,0 +1,30 @@
+---
+interface Props {
+	/** Optional heading shown above the grid. */
+	heading?: string;
+}
+const { heading } = Astro.props;
+---
+
+<section class="kb-grid-wrap not-content">
+	{heading && <h2 class="kb-grid-heading">{heading}</h2>}
+	<div class="kb-grid"><slot /></div>
+</section>
+
+<style>
+	.kb-grid-wrap {
+		margin-block: 2.5rem;
+	}
+	.kb-grid-heading {
+		margin: 0 0 1.25rem;
+		font-size: clamp(1.4rem, 1.2rem + 1vw, 1.85rem);
+		font-weight: 800;
+		letter-spacing: -0.01em;
+		color: var(--sl-color-white);
+	}
+	.kb-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+		gap: 1.25rem;
+	}
+</style>
