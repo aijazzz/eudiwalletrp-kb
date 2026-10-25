@@ -1,0 +1,20 @@
+---
+/** Site mark plus wordmark. Pass sizing classes (e.g. `h-9 w-auto`). */
+const { class: className } = Astro.props;
+interface Props {
+  class?: string;
+}
+---
+
+<span class={`inline-flex items-center gap-x-2.5 ${className ?? ''}`}>
+  <svg class="h-full w-auto shrink-0" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <rect width="64" height="64" rx="14" class="fill-neutral-800 dark:fill-neutral-700" fill="#262626"></rect>
+    <rect x="11" y="17" width="42" height="30" rx="6" class="fill-yellow-400" fill="#FACC15"></rect>
+    <rect x="11" y="23" width="42" height="5" fill="#A16207" fill-opacity="0.35"></rect>
+    <path d="M23 37.5l5.5 5.5L41 31" stroke="#262626" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>
+  <span class="flex flex-col leading-none whitespace-nowrap">
+    <span class="text-base font-bold tracking-tight text-neutral-800 dark:text-neutral-100">EUDI Wallet RP</span>
+    <span class="mt-0.5 text-xs font-medium text-neutral-600 dark:text-neutral-400">Knowledge Base</span>
+  </span>
+</span>
