@@ -4,7 +4,7 @@ Source for [eudiwalletrp.com](https://eudiwalletrp.com): a knowledge base for re
 
 ## Development
 
-Requires Node.js 22+.
+Requires Node.js 22.23.4+ (see `.nvmrc`).
 
 ```sh
 npm ci
