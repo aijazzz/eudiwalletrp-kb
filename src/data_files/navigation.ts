@@ -6,6 +6,7 @@ import { SITE } from './constants';
 
 export type NavLinkId =
   | 'home'
+  | 'check'
   | 'gettingStarted'
   | 'registration'
   | 'trackers'
@@ -15,6 +16,7 @@ export type NavLinkId =
 
 export const navLinks: { id: NavLinkId; path: string }[] = [
   { id: 'home', path: '/' },
+  { id: 'check', path: '/check/' },
   { id: 'gettingStarted', path: '/getting-started/' },
   { id: 'registration', path: '/registration-guide/' },
   { id: 'trackers', path: '/national-trackers/' },

@@ -1,0 +1,547 @@
+---
+/**
+ * /check/ — "Do you have to accept the EUDI Wallet?" self-assessment.
+ *
+ * Fully client-side: every step, result and national note is rendered here at
+ * build time and only shown or hidden by the small script at the bottom. The
+ * script keeps answers in memory only: no storage, cookies or network calls.
+ *
+ * Legal basis (checked against EUR-Lex, Regulation (EU) No 910/2014 as
+ * amended by Regulation (EU) 2024/1183): Art. 5b (registration of relying
+ * parties), Art. 5f(1)–(3) (acceptance duties), Art. 3(51) (strong user
+ * authentication), Recommendation 2003/361/EC Annex Art. 2 (micro and small
+ * enterprises), Implementing Regulation (EU) 2025/848 (registration of
+ * wallet-relying parties, as amended by (EU) 2026/1730).
+ */
+import MainLayout from '@/layouts/MainLayout.astro';
+import { nationalEntries } from '@/data/national';
+
+const EIDAS = 'https://eur-lex.europa.eu/eli/reg/2014/910/oj/eng';
+const EIDAS2 = 'https://eur-lex.europa.eu/eli/reg/2024/1183/oj/eng';
+const SME = 'https://eur-lex.europa.eu/eli/reco/2003/361/oj/eng';
+const DSA = 'https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng';
+const CIR848 = 'https://eur-lex.europa.eu/eli/reg_impl/2025/848/oj/eng';
+const CIR1730 = 'https://eur-lex.europa.eu/eli/reg_impl/2026/1730/oj/eng';
+
+type Option = { value: string; label: string; hint?: string };
+type Step = {
+  id: string;
+  question: string;
+  help: string;
+  why: string;
+  cite: { label: string; url: string }[];
+  options?: Option[];
+};
+
+const yesNoUnsure: Option[] = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'unsure', label: 'Not sure' },
+];
+
+const steps: Step[] = [
+  {
+    id: 'country',
+    question: 'Where is your organisation established?',
+    help: 'Choose the EU Member State where your organisation has its establishment.',
+    why: 'Relying parties register in the Member State where they are established, so this decides which national registrar and rules apply to you.',
+    cite: [{ label: 'Article 5b(1), Regulation (EU) No 910/2014', url: EIDAS2 }],
+  },
+  {
+    id: 'public',
+    question: 'Are you a public sector body offering an online service?',
+    help: 'For example a ministry, agency, municipality or other public authority whose online service requires users to identify themselves electronically.',
+    why: 'Where Member States require electronic identification and authentication to access an online service provided by a public sector body, they must also accept EUDI Wallets.',
+    cite: [{ label: 'Article 5f(1), Regulation (EU) No 910/2014', url: EIDAS2 }],
+    options: yesNoUnsure,
+  },
+  {
+    id: 'sca',
+    question: 'Are you required by law or by contract to use strong user authentication for online identification?',
+    help: 'Strong user authentication uses at least two independent factors from different categories: something only the user knows, has, or is. Article 5f(2) names areas such as transport, energy, banking, financial services, social security, health, drinking water, postal services, digital infrastructure, education and telecommunications.',
+    why: 'Private relying parties that must use strong user authentication under Union or national law, or by contractual obligation, must also accept EUDI Wallets when users ask to use them.',
+    cite: [
+      { label: 'Article 5f(2) and Article 3(51), Regulation (EU) No 910/2014', url: EIDAS2 },
+      { label: 'Recital 56, Regulation (EU) 2024/1183', url: EIDAS2 },
+    ],
+    options: yesNoUnsure,
+  },
+  {
+    id: 'size',
+    question: 'Is your organisation a micro or small enterprise?',
+    help: 'A small enterprise employs fewer than 50 persons and has an annual turnover and/or annual balance sheet total of no more than EUR 10 million. A micro enterprise employs fewer than 10 persons and has no more than EUR 2 million.',
+    why: 'Article 5f(2) exempts micro and small enterprises, as defined in Recommendation 2003/361/EC, from the acceptance duty for private relying parties.',
+    cite: [
+      { label: 'Article 5f(2), Regulation (EU) No 910/2014', url: EIDAS2 },
+      { label: 'Article 2 of the Annex, Recommendation 2003/361/EC', url: SME },
+    ],
+    options: yesNoUnsure,
+  },
+  {
+    id: 'vlop',
+    question: 'Are you a very large online platform that requires users to authenticate?',
+    help: 'This means a provider of a very large online platform designated under Article 33 of the Digital Services Act, Regulation (EU) 2022/2065.',
+    why: 'Very large online platforms that require user authentication must also accept and facilitate EUDI Wallets for authentication, on the user’s voluntary request and for the minimum data needed.',
+    cite: [
+      { label: 'Article 5f(3), Regulation (EU) No 910/2014', url: EIDAS2 },
+      { label: 'Article 33, Regulation (EU) 2022/2065', url: DSA },
+    ],
+    options: yesNoUnsure,
+  },
+  {
+    id: 'intent',
+    question: 'Would you like to accept the EUDI Wallet anyway, for example for onboarding or age checks?',
+    help: 'Any organisation can choose to rely on the wallet, even when no rule requires it.',
+    why: 'Whether you must or simply want to, you first have to register as a wallet-relying party in your Member State.',
+    cite: [{ label: 'Article 5b(1), Regulation (EU) No 910/2014', url: EIDAS2 }],
+    options: [
+      { value: 'yes', label: 'Yes' },
+      { value: 'maybe', label: 'Maybe later' },
+      { value: 'no', label: 'No' },
+    ],
+  },
+];
+
+const countries = [
+  ...nationalEntries.map(e => ({ value: e.code, label: e.name })),
+].sort((a, b) => a.label.localeCompare(b.label, 'en'));
+
+const results = {
+  likely: {
+    title: 'Likely required',
+    tone: 'border-orange-400',
+    badge: 'bg-orange-400 text-neutral-50',
+    text: 'Based on your answers, at least one of the acceptance duties in Article 5f of the eIDAS Regulation appears to apply to you. Plan to accept the EUDI Wallet and start with registration.',
+  },
+  possible: {
+    title: 'Possibly required',
+    tone: 'border-yellow-400',
+    badge: 'bg-yellow-400 text-neutral-800',
+    text: 'Based on your answers, an acceptance duty in Article 5f may apply, depending on the points you were unsure about. Confirm them with your legal or compliance team.',
+  },
+  none: {
+    title: 'Not required but worth considering',
+    tone: 'border-neutral-400',
+    badge: 'bg-neutral-600 text-neutral-50',
+    text: 'Based on your answers, none of the acceptance duties in Article 5f appears to apply to you. Accepting the EUDI Wallet is voluntary for you, and it can still make identification and onboarding easier for your users.',
+  },
+};
+
+const reasons: Record<string, { text: string; cite: string }> = {
+  'public-yes': {
+    text: 'You are a public sector body. Where your Member State requires electronic identification and authentication for your online service, EUDI Wallets must also be accepted.',
+    cite: 'Article 5f(1)',
+  },
+  'public-unsure': {
+    text: 'You were not sure whether you are a public sector body. If you are, and electronic identification is required for your online service, Article 5f(1) applies.',
+    cite: 'Article 5f(1)',
+  },
+  'sca-large': {
+    text: 'You must use strong user authentication by law or contract and you are not a micro or small enterprise. You must accept EUDI Wallets on the user’s voluntary request, no later than 36 months after the relevant implementing acts entered into force.',
+    cite: 'Article 5f(2), Article 3(51)',
+  },
+  'sca-size-unsure': {
+    text: 'You must use strong user authentication, but you were not sure about your size. Article 5f(2) applies unless you are a micro or small enterprise.',
+    cite: 'Article 5f(2); Recommendation 2003/361/EC',
+  },
+  'sca-unsure': {
+    text: 'You were not sure whether law or a contract requires strong user authentication. If it does, and you are not a micro or small enterprise, Article 5f(2) applies.',
+    cite: 'Article 5f(2), Article 3(51)',
+  },
+  'sca-small': {
+    text: 'Micro and small enterprises are exempt from the duty for private relying parties, even where strong user authentication is required.',
+    cite: 'Article 5f(2); Recommendation 2003/361/EC, Annex Art. 2',
+  },
+  'vlop-yes': {
+    text: 'You are a very large online platform that requires user authentication. You must accept and facilitate EUDI Wallets for authentication on the user’s voluntary request, for the minimum data necessary.',
+    cite: 'Article 5f(3)',
+  },
+  'vlop-unsure': {
+    text: 'You were not sure whether you are a designated very large online platform. If you are, and you require user authentication, Article 5f(3) applies.',
+    cite: 'Article 5f(3); Article 33 DSA',
+  },
+  none: {
+    text: 'None of the situations in Article 5f(1) to (3) matched your answers.',
+    cite: 'Article 5f',
+  },
+};
+
+const guides = [
+  { label: 'Who needs to register', url: '/registration-guide/who-needs-to-register/' },
+  { label: 'The registration process', url: '/registration-guide/registration-process/' },
+  { label: 'After you register', url: '/registration-guide/after-registration/' },
+  { label: 'eIDAS 2.0 in plain language', url: '/legal-regulatory/eidas-2/' },
+  { label: 'Implementing acts', url: '/legal-regulatory/implementing-acts/' },
+  { label: 'Technical integration', url: '/technical-integration/' },
+  { label: 'National trackers', url: '/national-trackers/member-states/' },
+];
+
+const totalSteps = steps.length;
+const fmtDate = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+
+const radioCls =
+  'flex cursor-pointer items-center gap-3 rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-3 text-neutral-700 transition hover:border-neutral-400 has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50 has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-zinc-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:has-[:checked]:border-yellow-400 dark:has-[:checked]:bg-neutral-700';
+const btnPrimary =
+  'inline-flex items-center justify-center gap-x-2 rounded-lg border border-transparent bg-orange-400 px-4 py-3 text-sm font-bold text-neutral-50 ring-zinc-500 outline-hidden transition duration-300 hover:bg-orange-500 focus-visible:ring-3 dark:ring-zinc-200 2xl:text-base';
+const btnSecondary =
+  'inline-flex items-center justify-center gap-x-2 rounded-lg border border-neutral-300 bg-neutral-300 px-4 py-3 text-sm font-medium text-neutral-700 ring-zinc-500 outline-hidden transition duration-300 hover:bg-neutral-400/50 focus-visible:ring-3 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:ring-zinc-200 2xl:text-base';
+const linkCls =
+  'font-medium text-neutral-800 underline decoration-yellow-500 decoration-2 underline-offset-2 hover:decoration-orange-400 dark:text-neutral-200';
+---
+
+<MainLayout
+  title="Do you have to accept the EUDI Wallet?"
+  description="A short, private self-assessment: find out whether eIDAS requires your organisation to accept the European Digital Identity Wallet as a relying party."
+>
+  <section class="mx-auto max-w-3xl px-0 py-10 sm:px-4 lg:py-14">
+    <p class="text-sm font-semibold tracking-wide text-orange-500 uppercase dark:text-orange-300">Self-assessment</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight text-balance text-neutral-800 sm:text-4xl dark:text-neutral-200">
+      Do you have to accept the EUDI Wallet?
+    </h1>
+    <p class="mt-3 text-pretty text-neutral-600 dark:text-neutral-400">
+      Up to six short questions, based on the eIDAS Regulation as amended in 2024. Your answers stay in this browser tab: nothing is stored or sent.
+    </p>
+    <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"><strong>This is guidance, not legal advice.</strong></p>
+
+    <noscript>
+      <p class="mt-6 rounded-lg border border-yellow-400 bg-yellow-50 p-4 text-neutral-700">
+        This check needs JavaScript. You can read the <a class={linkCls} href="/registration-guide/who-needs-to-register/">who needs to register</a> guide instead.
+      </p>
+    </noscript>
+
+    <div id="rp-check" class="mt-8 scroll-mt-24 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 shadow-xs sm:p-8 dark:border-neutral-700 dark:bg-neutral-800/60" data-total={totalSteps}>
+      {/* Progress */}
+      <div id="rp-progress-wrap">
+        <div class="flex items-center justify-between text-sm text-neutral-600 dark:text-neutral-400">
+          <span id="rp-progress-label">Question 1 of {totalSteps}</span>
+          <button type="button" class={`${linkCls} text-sm`} data-action="restart">Restart</button>
+        </div>
+        <div
+          id="rp-progress"
+          class="mt-2 h-2 w-full overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700"
+          role="progressbar"
+          aria-label="Progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={Math.round(100 / totalSteps)}
+        >
+          <div id="rp-progress-bar" class="h-full rounded-full bg-yellow-400 transition-all duration-300" style={`width:${100 / totalSteps}%`}></div>
+        </div>
+      </div>
+
+      <form id="rp-form" class="mt-6" novalidate>
+        {steps.map((step, i) => (
+          <fieldset data-step={step.id} hidden={i !== 0} aria-describedby={`help-${step.id} why-${step.id}`}>
+            <legend class="w-full">
+              <h2 class="text-xl font-bold text-balance text-neutral-800 outline-hidden sm:text-2xl dark:text-neutral-200" tabindex="-1" data-step-heading>
+                {step.question}
+              </h2>
+            </legend>
+            <p id={`help-${step.id}`} class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">{step.help}</p>
+
+            {step.options ? (
+              <div class="mt-5 grid gap-3 sm:grid-cols-3">
+                {step.options.map(opt => (
+                  <label class={radioCls}>
+                    <input type="radio" name={step.id} value={opt.value} class="h-4 w-4 shrink-0 accent-yellow-500" />
+                    <span class="font-medium">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            ) : (
+              <div class="mt-5">
+                <label for="rp-country" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Member State of establishment</label>
+                <select id="rp-country" name="country" class="mt-2 block w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-3 text-neutral-800 ring-zinc-500 outline-hidden focus-visible:ring-3 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200">
+                  <option value="">Select…</option>
+                  {countries.map(c => <option value={c.value}>{c.label}</option>)}
+                  <option value="OTHER">Another EU Member State</option>
+                  <option value="NONEU">Outside the EU</option>
+                </select>
+              </div>
+            )}
+
+            <p class="mt-3 hidden text-sm font-medium text-orange-600 dark:text-orange-300" data-error role="alert">
+              Please choose an answer to continue.
+            </p>
+
+            <aside id={`why-${step.id}`} class="mt-6 rounded-lg border-l-4 border-yellow-400 bg-neutral-100 p-4 text-sm text-neutral-700 dark:bg-neutral-900/50 dark:text-neutral-300">
+              <p class="font-semibold text-neutral-800 dark:text-neutral-200">Why we ask</p>
+              <p class="mt-1">{step.why}</p>
+              <p class="mt-2 text-neutral-600 dark:text-neutral-400">
+                Source:{' '}
+                {step.cite.map((c, j) => (
+                  <>
+                    {j > 0 && '; '}
+                    <a class={linkCls} href={c.url} rel="noopener noreferrer">{c.label}</a>
+                  </>
+                ))}
+              </p>
+            </aside>
+          </fieldset>
+        ))}
+
+        <div id="rp-nav" class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+          <button type="button" class={btnSecondary} data-action="back" hidden>Back</button>
+          <span class="hidden sm:block" aria-hidden="true"></span>
+          <button type="submit" class={btnPrimary} id="rp-next">Next</button>
+        </div>
+      </form>
+
+      {/* Result */}
+      <p id="rp-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+      <div id="rp-result" hidden>
+        {Object.entries(results).map(([key, r]) => (
+          <div data-result={key} hidden class={`border-l-4 ${r.tone} pl-4`}>
+            <span class={`inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase ${r.badge}`}>Result</span>
+            <h2 class="mt-3 text-2xl font-bold text-neutral-800 outline-hidden sm:text-3xl dark:text-neutral-200" tabindex="-1" data-result-heading>
+              {r.title}
+            </h2>
+            <p class="mt-3 text-pretty text-neutral-700 dark:text-neutral-300">{r.text}</p>
+          </div>
+        ))}
+
+        <h3 class="mt-8 text-lg font-bold text-neutral-800 dark:text-neutral-200">Why</h3>
+        <ul class="mt-3 space-y-3">
+          {Object.entries(reasons).map(([key, r]) => (
+            <li data-reason={key} hidden class="rounded-lg bg-neutral-100 p-3 text-neutral-700 dark:bg-neutral-900/50 dark:text-neutral-300">
+              {r.text} <span class="text-sm text-neutral-600 dark:text-neutral-400">Source: <a class={linkCls} href={EIDAS2} rel="noopener noreferrer">{r.cite}</a>.</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-8 rounded-lg border border-yellow-400 bg-yellow-50 p-4 text-neutral-800 dark:border-yellow-500/60 dark:bg-neutral-900/50 dark:text-neutral-200">
+          <h3 class="font-bold">Every relying party registers first</h3>
+          <p class="mt-1 text-pretty">
+            Whatever your result, you must register in the Member State where you are established before relying on EUDI Wallets
+            (<a class={linkCls} href={EIDAS2} rel="noopener noreferrer">Article 5b(1)</a>).
+            The registration rules in <a class={linkCls} href={CIR848} rel="noopener noreferrer">Implementing Regulation (EU) 2025/848</a> apply from 24 December 2026.
+            Wallets authenticate you with a wallet-relying party access certificate (Article 7), and registration certificates are issued in an automated manner after registration
+            (Article 8, as amended by <a class={linkCls} href={CIR1730} rel="noopener noreferrer">Implementing Regulation (EU) 2026/1730</a>).
+          </p>
+          <p class="mt-2 text-sm" data-intent="yes" hidden>You said you want to accept the wallet: registration is your first step.</p>
+          <p class="mt-2 text-sm" data-intent="maybe" hidden>If you decide to accept the wallet later, registration is still your first step.</p>
+          <p class="mt-2 text-sm" data-intent="no" hidden>If a duty applies to you or you change your mind, registration is still your first step.</p>
+        </div>
+
+        <h3 class="mt-8 text-lg font-bold text-neutral-800 dark:text-neutral-200">Key dates</h3>
+        <ul class="mt-3 list-disc space-y-2 pl-5 text-neutral-700 dark:text-neutral-300">
+          <li>
+            <strong>24 December 2024:</strong> the implementing acts under Article 5a(23) and Article 5c(6) (Implementing Regulations (EU) 2024/2977, 2024/2979, 2024/2980, 2024/2981 and 2024/2982) entered into force.
+          </li>
+          <li>
+            <strong>By 24 December 2026:</strong> each Member State provides at least one EUDI Wallet (Article 5a(1): within 24 months of those acts entering into force). Implementing Regulation (EU) 2025/848 on registration applies from the same day.
+          </li>
+          <li>
+            <strong>By 24 December 2027:</strong> private relying parties covered by Article 5f(2) accept EUDI Wallets (no later than 36 months after those acts entered into force).
+          </li>
+          <li>Article 5f(1) and 5f(3) set no separate date in the Regulation.</li>
+        </ul>
+        <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">The 2026 and 2027 dates are calculated from the entry-into-force date. The Regulation states the periods, not the calendar dates.</p>
+
+        <h3 class="mt-8 text-lg font-bold text-neutral-800 dark:text-neutral-200">National notes</h3>
+        {nationalEntries.map(e => (
+          <div data-country={e.code} hidden class="mt-3 text-neutral-700 dark:text-neutral-300">
+            <p class="font-semibold text-neutral-800 dark:text-neutral-200">{e.name}</p>
+            {e.status === 'confirmed' ? (
+              <p class="mt-1">Registrar for wallet-relying parties: <strong>{e.registrar}</strong>.</p>
+            ) : (
+              <p class="mt-1">
+                National details not yet confirmed; check with {e.checkWith ?? 'the competent national authority'}.
+              </p>
+            )}
+            {e.wallet && <p class="mt-1">National wallet: {e.wallet}.</p>}
+            {e.notes.length > 0 && (
+              <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+                {e.notes.map(n => <li>{n}</li>)}
+              </ul>
+            )}
+            {e.sources.length > 0 && (
+              <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                Sources:{' '}
+                {e.sources.map((s, j) => (
+                  <>
+                    {j > 0 && '; '}
+                    <a class={linkCls} href={s.url} rel="noopener noreferrer">{s.label}</a>
+                  </>
+                ))}
+                . Last checked {fmtDate(e.lastChecked)}.
+              </p>
+            )}
+          </div>
+        ))}
+        <div data-country="OTHER" hidden class="mt-3 text-neutral-700 dark:text-neutral-300">
+          <p>National details not yet confirmed; check with your national authority responsible for the EUDI Wallet. Our <a class={linkCls} href="/national-trackers/member-states/">national trackers</a> will add more Member States.</p>
+        </div>
+        <div data-country="NONEU" hidden class="mt-3 text-neutral-700 dark:text-neutral-300">
+          <p>This check covers organisations established in an EU Member State. Registration under Article 5b(1) is tied to the Member State where a relying party is established, so get advice on how the rules apply to you.</p>
+        </div>
+
+        <h3 class="mt-8 text-lg font-bold text-neutral-800 dark:text-neutral-200">Guides</h3>
+        <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+          {guides.map(g => (
+            <li><a class={linkCls} href={g.url}>{g.label}</a></li>
+          ))}
+        </ul>
+
+        <p class="mt-8 rounded-lg bg-neutral-200 p-3 text-sm font-semibold text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200">
+          This is guidance, not legal advice.
+        </p>
+
+        <div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+          <button type="button" class={btnSecondary} data-action="back">Back</button>
+          <button type="button" class={btnPrimary} data-action="restart">Start again</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-6 text-sm text-neutral-600 dark:text-neutral-400">
+      Based on <a class={linkCls} href={EIDAS} rel="noopener noreferrer">Regulation (EU) No 910/2014</a> as amended by <a class={linkCls} href={EIDAS2} rel="noopener noreferrer">Regulation (EU) 2024/1183</a>. Checked against EUR-Lex on 26 October 2026.
+    </p>
+  </section>
+</MainLayout>
+
+<script>
+  // Answers live in memory only. No storage, cookies or network requests.
+  type Answers = Record<string, string>;
+  const ORDER = ['country', 'public', 'sca', 'size', 'vlop', 'intent'];
+
+  const root = document.getElementById('rp-check');
+  const form = document.getElementById('rp-form') as HTMLFormElement | null;
+  if (root && form) {
+    const result = document.getElementById('rp-result')!;
+    const status = document.getElementById('rp-status')!;
+    const progressWrap = document.getElementById('rp-progress-wrap')!;
+    const progress = document.getElementById('rp-progress')!;
+    const bar = document.getElementById('rp-progress-bar')!;
+    const label = document.getElementById('rp-progress-label')!;
+    const formBack = form.querySelector<HTMLButtonElement>('[data-action="back"]')!;
+
+    let answers: Answers = {};
+    let history: string[] = [];
+    let current = 'country';
+
+    const stepEl = (id: string) => form.querySelector<HTMLFieldSetElement>(`[data-step="${id}"]`)!;
+    const applies = (id: string, a: Answers) =>
+      id !== 'size' || a.sca === undefined || a.sca === 'yes' || a.sca === 'unsure';
+    const activeSteps = (a: Answers) => ORDER.filter(id => applies(id, a));
+
+    const readAnswer = (id: string): string => {
+      const el = stepEl(id);
+      if (id === 'country') return (el.querySelector('select') as HTMLSelectElement).value;
+      const checked = el.querySelector<HTMLInputElement>('input:checked');
+      return checked ? checked.value : '';
+    };
+
+    const updateProgress = (id: string) => {
+      const list = activeSteps(answers);
+      const n = list.indexOf(id) + 1;
+      const pct = Math.round((n / list.length) * 100);
+      label.textContent = `Question ${n} of ${list.length}`;
+      progress.setAttribute('aria-valuenow', String(pct));
+      progress.setAttribute('aria-valuetext', `Question ${n} of ${list.length}`);
+      bar.style.width = `${pct}%`;
+    };
+
+    const show = (id: string, focus = true) => {
+      current = id;
+      form.querySelectorAll<HTMLFieldSetElement>('[data-step]').forEach(f => (f.hidden = f.dataset.step !== id));
+      stepEl(id).querySelector<HTMLElement>('[data-error]')!.classList.add('hidden');
+      form.hidden = false;
+      result.hidden = true;
+      progressWrap.hidden = false;
+      formBack.hidden = history.length === 0;
+      updateProgress(id);
+      if (focus) stepEl(id).querySelector<HTMLElement>('[data-step-heading]')!.focus();
+    };
+
+    const outcome = (a: Answers) => {
+      const reasons: string[] = [];
+      const scaApplies = a.sca === 'yes' || a.sca === 'unsure';
+      if (a.public === 'yes') reasons.push('public-yes');
+      if (a.vlop === 'yes') reasons.push('vlop-yes');
+      if (a.sca === 'yes' && a.size === 'no') reasons.push('sca-large');
+      const likely = reasons.length > 0;
+      if (a.public === 'unsure') reasons.push('public-unsure');
+      if (a.vlop === 'unsure') reasons.push('vlop-unsure');
+      if (a.sca === 'yes' && a.size === 'unsure') reasons.push('sca-size-unsure');
+      if (a.sca === 'unsure' && a.size !== 'yes') reasons.push('sca-unsure');
+      if (scaApplies && a.size === 'yes') reasons.push('sca-small');
+      const possible = !likely && reasons.some(r => r.endsWith('unsure'));
+      if (reasons.length === 0) reasons.push('none');
+      return { kind: likely ? 'likely' : possible ? 'possible' : 'none', reasons };
+    };
+
+    const showResult = () => {
+      const { kind, reasons } = outcome(answers);
+      result.querySelectorAll<HTMLElement>('[data-result]').forEach(el => (el.hidden = el.dataset.result !== kind));
+      result.querySelectorAll<HTMLElement>('[data-reason]').forEach(el => (el.hidden = !reasons.includes(el.dataset.reason!)));
+      result.querySelectorAll<HTMLElement>('[data-country]').forEach(el => (el.hidden = el.dataset.country !== answers.country));
+      result.querySelectorAll<HTMLElement>('[data-intent]').forEach(el => (el.hidden = el.dataset.intent !== answers.intent));
+      form.hidden = true;
+      progressWrap.hidden = true;
+      result.hidden = false;
+      const heading = result.querySelector<HTMLElement>(`[data-result="${kind}"] [data-result-heading]`)!;
+      status.textContent = `Result: ${heading.textContent?.trim()}`;
+      heading.focus();
+      root.scrollIntoView({ block: 'start' });
+    };
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const value = readAnswer(current);
+      const err = stepEl(current).querySelector<HTMLElement>('[data-error]')!;
+      if (!value) {
+        err.classList.remove('hidden');
+        stepEl(current).querySelector<HTMLElement>('select, input')!.focus();
+        return;
+      }
+      err.classList.add('hidden');
+      answers[current] = value;
+      if (current === 'sca' && !applies('size', answers)) delete answers.size;
+      const list = activeSteps(answers);
+      const next = list[list.indexOf(current) + 1];
+      history.push(current);
+      if (next) show(next);
+      else showResult();
+    });
+
+    // A <select> does not submit its form on Enter; make it behave like the radios.
+    document.getElementById('rp-country')!.addEventListener('keydown', e => {
+      if ((e as KeyboardEvent).key === 'Enter') {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    const back = () => {
+      const prev = history.pop();
+      if (prev) show(prev);
+    };
+
+    const restart = () => {
+      answers = {};
+      history = [];
+      form.reset();
+      status.textContent = '';
+      show('country');
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-action="back"]').forEach(b => b.addEventListener('click', back));
+    root.querySelectorAll<HTMLButtonElement>('[data-action="restart"]').forEach(b => b.addEventListener('click', restart));
+
+    // Last step's label reads "See result".
+    const next = document.getElementById('rp-next')!;
+    const observer = () => {
+      const list = activeSteps(answers);
+      next.textContent = list[list.length - 1] === current ? 'See result' : 'Next';
+    };
+    form.addEventListener('submit', observer);
+    root.querySelectorAll('[data-action]').forEach(b => b.addEventListener('click', observer));
+  }
+</script>

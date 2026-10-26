@@ -30,6 +30,7 @@ export const en = {
     /** Labels for `navLinks` in `@data/navigation`, keyed by id. */
     labels: {
       home: 'Home',
+      check: 'Check',
       gettingStarted: 'Getting started',
       registration: 'Registration',
       trackers: 'Trackers',
@@ -70,46 +71,45 @@ export const en = {
   },
 
   home: {
-    hero: {
-      title:
-        'Accepting the EUDI Wallet? <span class="text-yellow-500 dark:text-yellow-400">Start here.</span>',
-      subTitle:
-        'A friendly knowledge base for organisations that want to accept the European Digital Identity Wallet as relying parties.',
-      primaryBtn: 'Get started',
-      secondaryBtn: 'Browse the glossary',
+    banner: {
+      line: 'EUDI Wallet can help your business. Are you ready to become a Relying Party?',
+      sub: 'Answer a few short questions to see whether eIDAS requires you to accept the European Digital Identity Wallet. It runs entirely in your browser and nothing is stored.',
+      btn: 'Check if you must',
+      knowLink: 'I already know I must',
       imageAlt:
         'Illustration of a digital wallet sharing a verified credential with a service',
     },
     tasks: {
-      title: 'What do you need to do?',
+      title: 'Already know you must? Start here.',
       subTitle:
-        'Pick a topic to jump straight to the relevant guides. Each section is being prepared and will be published here.',
+        'Every relying party registers in the Member State where it is established before relying on the wallet. These guides walk you through registration, certificates and what comes next.',
       items: [
         {
-          heading: 'Getting started',
+          heading: 'Who needs to register',
           content:
-            'New here? Learn what this knowledge base covers and how to use it.',
-          svg: 'rocket',
-          url: '/getting-started/',
+            'Check which organisations count as relying parties and must register under Article 5b.',
+          svg: 'question',
+          url: '/registration-guide/who-needs-to-register/',
         },
         {
           heading: 'Register as a relying party',
-          content: 'Guidance on relying party registration, step by step.',
+          content: 'The registration process with your national registrar, step by step.',
           svg: 'verified',
-          url: '/registration-guide/',
+          url: '/registration-guide/registration-process/',
         },
         {
-          heading: 'National trackers',
-          content: 'Follow implementation status across EU member states.',
-          svg: 'earth',
-          url: '/national-trackers/',
-        },
-        {
-          heading: 'Legal & regulatory',
+          heading: 'Certificates and next steps',
           content:
-            'Understand eIDAS 2.0 and related rules in plain language.',
+            'Access and registration certificates, and what to keep up to date after you register.',
+          svg: 'checkCircle',
+          url: '/registration-guide/after-registration/',
+        },
+        {
+          heading: 'Implementing acts',
+          content:
+            'The implementing regulations behind registration, certificates and wallet integration.',
           svg: 'books',
-          url: '/legal-regulatory/',
+          url: '/legal-regulatory/implementing-acts/',
         },
         {
           heading: 'Technical integration',
@@ -119,10 +119,10 @@ export const en = {
           url: '/technical-integration/',
         },
         {
-          heading: 'Glossary',
-          content: 'Look up the key terms used across this knowledge base.',
-          svg: 'guides',
-          url: '/glossary/',
+          heading: 'National trackers',
+          content: 'Registrars and implementation status across EU Member States.',
+          svg: 'earth',
+          url: '/national-trackers/member-states/',
         },
       ],
     },
