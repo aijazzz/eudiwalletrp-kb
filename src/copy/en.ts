@@ -72,7 +72,7 @@ export const en = {
 
   home: {
     banner: {
-      line: 'EUDI Wallet can help your business. Are you ready to become a Relying Party?',
+      line: 'Grab the opportunity EUDI Wallet is offering to your business',
       sub: 'Answer a few short questions to see whether eIDAS requires you to accept the European Digital Identity Wallet. It runs entirely in your browser and nothing is stored.',
       btn: 'Check if you must',
       knowLink: 'I already know I must',
@@ -85,42 +85,44 @@ export const en = {
         'Every relying party registers in the Member State where it is established before relying on the wallet. These guides walk you through registration, certificates and what comes next.',
       items: [
         {
-          heading: 'Who needs to register',
+          heading: 'How to register',
           content:
-            'Check which organisations count as relying parties and must register under Article 5b.',
-          svg: 'question',
-          url: '/registration-guide/who-needs-to-register/',
-        },
-        {
-          heading: 'Register as a relying party',
-          content: 'The registration process with your national registrar, step by step.',
+            'The registration steps with your national registrar, from application to certificates.',
           svg: 'verified',
           url: '/registration-guide/registration-process/',
         },
         {
-          heading: 'Certificates and next steps',
+          heading: 'Registration requirements',
           content:
-            'Access and registration certificates, and what to keep up to date after you register.',
+            'What you must provide under Implementing Regulation (EU) 2025/848, point by point.',
+          svg: 'clipboard',
+          url: '/registration-guide/registration-requirements/',
+        },
+        {
+          heading: 'Access and registration certificates',
+          content:
+            'What each certificate does and how wallets use it.',
           svg: 'checkCircle',
-          url: '/registration-guide/after-registration/',
+          url: '/registration-guide/certificates/',
         },
         {
-          heading: 'Implementing acts',
+          heading: 'Deadlines 2026–2027',
           content:
-            'The implementing regulations behind registration, certificates and wallet integration.',
-          svg: 'books',
-          url: '/legal-regulatory/implementing-acts/',
+            'Key dates, marked as stated in the text or calculated from it.',
+          svg: 'alert',
+          url: '/deadlines/',
         },
         {
-          heading: 'Technical integration',
+          heading: 'Technical essentials',
           content:
-            'Connect your service using OpenID4VP and related standards.',
+            'OpenID4VP, HAIP and how certificates appear in wallet requests.',
           svg: 'puzzle',
-          url: '/technical-integration/',
+          url: '/technical-integration/openid4vp/',
         },
         {
-          heading: 'National trackers',
-          content: 'Registrars and implementation status across EU Member States.',
+          heading: 'National registers',
+          content:
+            'Registrars and official sources, Member State by Member State.',
           svg: 'earth',
           url: '/national-trackers/member-states/',
         },

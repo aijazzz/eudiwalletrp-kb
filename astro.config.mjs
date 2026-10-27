@@ -18,30 +18,44 @@ export default defineConfig({
       // https://starlight.astro.build/guides/sidebar/
       sidebar: [
         {
-          label: 'Getting started',
-          items: [
-            { label: 'Section home', slug: 'getting-started' },
-            { label: 'Overview', slug: 'getting-started/overview' },
-            { label: 'How to use this site', slug: 'getting-started/how-to-use' },
-          ],
-        },
-        {
-          label: 'Registration guide',
+          label: 'Registration',
           items: [
             { label: 'Section home', slug: 'registration-guide' },
             { label: 'Who needs to register', slug: 'registration-guide/who-needs-to-register' },
-            { label: 'The registration process', slug: 'registration-guide/registration-process' },
+            { label: 'How to register', slug: 'registration-guide/registration-process' },
+            { label: 'Registration requirements', slug: 'registration-guide/registration-requirements' },
+            { label: 'Registration checklist', slug: 'registration-guide/checklist' },
+            { label: 'Access and registration certificates', slug: 'registration-guide/certificates' },
+            { label: 'Intermediary or own verifier?', slug: 'registration-guide/intermediaries' },
             { label: 'After you register', slug: 'registration-guide/after-registration' },
           ],
         },
         {
-          label: 'National trackers',
+          label: 'National registers',
           items: [
             { label: 'Section home', slug: 'national-trackers' },
+            { label: 'Status by Member State', slug: 'national-trackers/member-states' },
             { label: 'Status overview', slug: 'national-trackers/status-overview' },
-            { label: 'Member-state profiles', slug: 'national-trackers/member-states' },
             { label: 'How we track', slug: 'national-trackers/methodology' },
           ],
+        },
+        {
+          label: 'Data & technical',
+          items: [
+            { label: 'Section home', slug: 'technical-integration' },
+            { label: 'What data can you request?', slug: 'technical-integration/data-requests' },
+            { label: 'Technical essentials', slug: 'technical-integration/openid4vp' },
+            { label: 'Credential formats', slug: 'technical-integration/credential-formats' },
+            { label: 'Testing your integration', slug: 'technical-integration/testing' },
+          ],
+        },
+        {
+          label: 'Deadlines',
+          items: [{ label: 'Deadlines 2026–2027', slug: 'deadlines' }],
+        },
+        {
+          label: 'FAQ',
+          items: [{ label: 'FAQ for relying parties', slug: 'faq' }],
         },
         {
           label: 'Legal & regulatory',
@@ -53,12 +67,11 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Technical integration',
+          label: 'Getting started',
           items: [
-            { label: 'Section home', slug: 'technical-integration' },
-            { label: 'OpenID4VP', slug: 'technical-integration/openid4vp' },
-            { label: 'Credential formats', slug: 'technical-integration/credential-formats' },
-            { label: 'Testing your integration', slug: 'technical-integration/testing' },
+            { label: 'Section home', slug: 'getting-started' },
+            { label: 'Overview', slug: 'getting-started/overview' },
+            { label: 'How to use this site', slug: 'getting-started/how-to-use' },
           ],
         },
         { label: 'Glossary', slug: 'glossary' },
