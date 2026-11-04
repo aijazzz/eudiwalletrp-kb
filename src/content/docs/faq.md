@@ -82,7 +82,7 @@ Notify the registrar without undue delay and ask for the registration to be canc
 2025/848 applies from 24 December 2026. See [Deadlines 2026–2027](/deadlines/).
 
 :::note[Guidance, not legal advice]
-These answers explain the official texts in plain language. They are not legal advice. Where the texts are silent, we say so; check with your registrar or legal team.
+These answers explain the official texts in plain language. They are not legal advice. Where the texts are silent, we say so; check with your registrar or legal team. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

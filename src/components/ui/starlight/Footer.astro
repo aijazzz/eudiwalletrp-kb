@@ -1,0 +1,47 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import StarlightFooter from '@astrojs/starlight/components/Footer.astro';
+---
+
+<StarlightFooter {...Astro.props}><slot /></StarlightFooter>
+
+<div class="site-footer">
+  <p>
+    <strong>Guidance, not legal advice.</strong> This site is independent and is not
+    affiliated with the European Commission or any national authority. Read the
+    full <a href="/disclaimer/">disclaimer</a>.
+  </p>
+  <p class="links">
+    <a href="/about/">About</a>
+    <span aria-hidden="true">·</span>
+    <a href="/disclaimer/">Disclaimer</a>
+    <span aria-hidden="true">·</span>
+    <a href="/check/">Check if you must</a>
+    <span aria-hidden="true">·</span>
+    <a href="mailto:info@eudiwalletrp.com">info@eudiwalletrp.com</a>
+  </p>
+</div>
+
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+  .site-footer p + p {
+    margin-top: 0.5rem;
+  }
+  .site-footer .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .site-footer a {
+    color: var(--sl-color-gray-2);
+  }
+  .site-footer a:hover {
+    color: var(--sl-color-white);
+  }
+</style>

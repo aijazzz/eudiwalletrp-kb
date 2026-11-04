@@ -57,7 +57,7 @@ The transaction log records your name, contact details, unique identifier and Me
 - **Attribute naming.** Which technical names and attestation types to register depends on the attestation schemes. Check with your registrar.
 
 :::note[Guidance, not legal advice]
-This page explains the official texts in plain language. It is not legal advice. Run your own data protection impact assessment where required.
+This page explains the official texts in plain language. It is not legal advice. Run your own data protection impact assessment where required. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

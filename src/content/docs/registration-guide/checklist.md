@@ -74,7 +74,7 @@ See [What data can you request?](/technical-integration/data-requests/).
 - [ ] Know the **deadlines** that apply to you: [Deadlines for relying parties](/deadlines/).
 
 :::note[Guidance, not legal advice]
-This checklist is a practical aid based on the official texts. It is not legal advice and it is not complete for every sector. Your registrar's policy and your legal advisers take precedence.
+This checklist is a practical aid based on the official texts. It is not legal advice and it is not complete for every sector. Your registrar's policy and your legal advisers take precedence. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

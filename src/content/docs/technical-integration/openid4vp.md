@@ -84,7 +84,7 @@ The ARF is the EU's technical reference framework. It is **not legally binding**
 - **Browser support** for the Digital Credentials API varies. The regulation itself notes non-conformities caused by operating systems and browsers (note to EAAP-API-GEN-01).
 
 :::note[Guidance, not legal advice]
-This page summarises official specifications for orientation. It is not legal or implementation advice. Always build against the exact specification versions referenced by the implementing regulations.
+This page summarises official specifications for orientation. It is not legal or implementation advice. Always build against the exact specification versions referenced by the implementing regulations. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

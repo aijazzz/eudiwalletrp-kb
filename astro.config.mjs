@@ -75,6 +75,13 @@ export default defineConfig({
           ],
         },
         { label: 'Glossary', slug: 'glossary' },
+        {
+          label: 'About',
+          items: [
+            { label: 'About this site', slug: 'about' },
+            { label: 'Disclaimer', slug: 'disclaimer' },
+          ],
+        },
       ],
       social: [
         {
@@ -92,6 +99,7 @@ export default defineConfig({
         MobileMenuFooter:
           './src/components/ui/starlight/MobileMenuFooter.astro',
         ThemeSelect: './src/components/ui/starlight/ThemeSelect.astro',
+        Footer: './src/components/ui/starlight/Footer.astro',
       },
       head: [
         {

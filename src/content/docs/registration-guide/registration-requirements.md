@@ -79,7 +79,7 @@ Annex II says the API reply excludes "the contact information in Annex I point 4
 - **Common technical format.** The ARF's [Technical Specification 5](https://github.com/eu-digital-identity-wallet/eudi-doc-standards-and-technical-specifications/blob/main/docs/technical-specifications/ts5-common-formats-and-api-for-rp-registration-information.md) and [Technical Specification 6](https://github.com/eu-digital-identity-wallet/eudi-doc-standards-and-technical-specifications/blob/main/docs/technical-specifications/ts6-common-set-of-rp-information-to-be-registered.md) describe the data model. They are technical specifications, not legal texts.
 
 :::note[Guidance, not legal advice]
-This page summarises the official texts in plain language. It is not legal advice. Always check the current consolidated text on EUR-Lex and your national registration policy.
+This page summarises the official texts in plain language. It is not legal advice. Always check the current consolidated text on EUR-Lex and your national registration policy. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

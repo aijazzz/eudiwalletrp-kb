@@ -74,7 +74,7 @@ The ARF adds: "an intermediated Relying Party using the services of an intermedi
 - **Registrar processes** for intermediated relying parties differ by Member State and are mostly unpublished.
 
 :::note[Guidance, not legal advice]
-This page explains the official texts and the ARF in plain language. It is not legal advice. Review contracts with an intermediary with your legal advisers.
+This page explains the official texts and the ARF in plain language. It is not legal advice. Review contracts with an intermediary with your legal advisers. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

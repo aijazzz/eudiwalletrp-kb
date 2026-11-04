@@ -54,7 +54,12 @@ export const en = {
       },
       aboutTitle: 'About this site',
       aboutContent:
-        'An independent knowledge base for relying parties of the European Digital Identity Wallet. Content is being prepared and will be published section by section.',
+        'An independent knowledge base for relying parties of the European Digital Identity Wallet. Not affiliated with the European Commission, any Member State or any wallet provider.',
+      disclaimerShort:
+        'Guidance, not legal advice. Official texts and your competent authority prevail.',
+      aboutLink: 'About',
+      disclaimerLink: 'Disclaimer',
+      contactLabel: 'Contact',
       builtWith: 'Site design based on the',
       template: 'ScrewFast',
       templateBy: 'template by Emil Gulamov (MIT licence).',

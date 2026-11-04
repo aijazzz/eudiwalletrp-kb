@@ -60,7 +60,7 @@ The EU rules fix the outcome and some minimum safeguards. The exact screens, doc
 - **Exact procedure.** Supporting documents and identification methods are national choices under Article 4.
 
 :::note[Guidance, not legal advice]
-This page explains the official texts in plain language. It is not legal advice. Check the national registration policy and take professional advice for your situation.
+This page explains the official texts in plain language. It is not legal advice. Check the national registration policy and take professional advice for your situation. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

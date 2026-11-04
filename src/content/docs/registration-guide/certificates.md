@@ -67,7 +67,7 @@ See [Technical essentials](/technical-integration/openid4vp/) for the protocol d
 - **Which authorities** issue certificates in each Member State. Only some have been named; see [National registers](/national-trackers/member-states/).
 
 :::note[Guidance, not legal advice]
-This page explains the official texts in plain language. It is not legal advice. Check the certificate policy of your national provider.
+This page explains the official texts in plain language. It is not legal advice. Check the certificate policy of your national provider. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages

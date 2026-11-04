@@ -55,7 +55,7 @@ Member States can set national transitional dates for their own registers. For e
 - **Enforcement** of Article 5f(2) is national. Penalties depend on national law.
 
 :::note[Guidance, not legal advice]
-This page explains the official texts in plain language. Calculated dates are our reading of the text. It is not legal advice; confirm the dates that matter to you with your legal team.
+This page explains the official texts in plain language. Calculated dates are our reading of the text. It is not legal advice; confirm the dates that matter to you with your legal team. Read the full [disclaimer](/disclaimer/).
 :::
 
 ## Related pages
