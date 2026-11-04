@@ -14,12 +14,23 @@ Options:
    head: [{ tag: 'script', attrs: { defer: true, src: 'https://static.cloudflareinsights.com/beacon.min.js', 'data-cf-beacon': '{"token": "<SITE_TOKEN>"}' } }],
    ```
 
-## Pending: custom domains (once the zone moves into the EUDIWallet account)
+## Custom domains (live since 4 Nov 2026)
 
-`eudiwalletrp.com` and `www.eudiwalletrp.com` are already registered on the Pages project (status `pending`, "CNAME record not set").
-1. Move the `eudiwalletrp.com` zone into the EUDIWallet account (nameservers currently `love`/`tosana.ns.cloudflare.com`; check whether they change after the move and update them at the registrar if so).
-2. Add **Zone → Zone Read** and **Zone → DNS Edit** (scoped to eudiwalletrp.com) to the API token (add **Zone → Single Redirect / Dynamic Redirect Edit** or **Account → Bulk URL Redirects Edit** if the redirect is managed via the API).
-3. DNS (proxied): `CNAME eudiwalletrp.com → eudiwalletrp-kb.pages.dev` (CNAME flattening at the apex) and `CNAME www → eudiwalletrp-kb.pages.dev`. With the zone in the same account, Cloudflare usually creates these automatically when the domain is (re)validated; to re-trigger, retry/re-add the domain on the project (`PATCH /accounts/{id}/pages/projects/eudiwalletrp-kb/domains/{name}`).
-4. Confirm both domains show `active` and certificates are issued.
-5. Make the apex the primary domain: 301 `www.eudiwalletrp.com/*` → `https://eudiwalletrp.com/${1}`, keeping the path and query string, via a Redirect Rule (Single Redirect) on the zone or a Bulk Redirect list and rule.
-6. (Optional) Redirect `eudiwalletrp-kb.pages.dev` to the apex via a Bulk Redirect so the apex is the only URL search engines see.
+- Zone `eudiwalletrp.com` (id `329552e3210535742a655c545899724a`) is in the EUDIWallet account, status `active`. Nameservers `adelaide.ns.cloudflare.com` / `roan.ns.cloudflare.com`; registrar is Cloudflare.
+- Pages custom domains on `eudiwalletrp-kb`: `eudiwalletrp.com` and `www.eudiwalletrp.com`, both `active`. Certificates are issued by Google Trust Services; Pages renews them automatically.
+- DNS (proxied): `CNAME eudiwalletrp.com → eudiwalletrp-kb.pages.dev` (CNAME flattening at the apex) and `CNAME www → eudiwalletrp-kb.pages.dev`.
+- The apex is the primary domain. A Single Redirect rule (phase `http_request_dynamic_redirect`) sends `www.eudiwalletrp.com/*` with a 301 to `https://eudiwalletrp.com/*`, keeping the path and query string.
+- Always Use HTTPS is on. SSL/TLS mode is `full`.
+- Two old `_acme-challenge` TXT records came over with the zone import. They did not block certificate issuance and were left in place; they can be deleted.
+- (Optional, not done) Redirect `eudiwalletrp-kb.pages.dev` to the apex via a Bulk Redirect so the apex is the only URL search engines see.
+
+## Email Routing
+
+- Enabled on the zone. The MX records (`route1/2/3.mx.cloudflare.net`), SPF (`v=spf1 include:_spf.mx.cloudflare.net ~all`) and DKIM (`cf2024-1._domainkey`) records are managed by Email Routing.
+- Verified destination address: `eengineer@gmail.com`.
+- Rules: `info@eudiwalletrp.com` forwards to `eengineer@gmail.com`; the catch-all forwards to `eengineer@gmail.com`. Both are enabled.
+
+## API tokens
+
+- The GitHub repo secret `CLOUDFLARE_API_TOKEN` (used by the deploy workflow) still holds the older token, which expires around 25 Jan 2027. Replace it before then.
+- A newer account API token (no expiry date set) was used for the zone, DNS, redirect and Email Routing setup.
