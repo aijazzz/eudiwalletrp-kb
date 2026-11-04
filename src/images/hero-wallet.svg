@@ -1,0 +1,40 @@
+<svg width="812" height="515" viewBox="0 0 812 515" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Original illustration: a wallet on a phone presenting a credential to a service -->
+  <circle cx="250" cy="270" r="190" fill="#FDE68A" fill-opacity="0.45"/>
+  <circle cx="610" cy="210" r="120" fill="#FED7AA" fill-opacity="0.5"/>
+  <!-- phone -->
+  <rect x="150" y="70" width="200" height="390" rx="32" fill="#262626"/>
+  <rect x="164" y="92" width="172" height="346" rx="20" fill="#FAFAFA"/>
+  <rect x="220" y="80" width="60" height="6" rx="3" fill="#525252"/>
+  <!-- wallet cards on phone -->
+  <rect x="182" y="128" width="136" height="84" rx="12" fill="#FACC15"/>
+  <rect x="182" y="146" width="136" height="12" fill="#A16207" fill-opacity="0.3"/>
+  <rect x="196" y="176" width="64" height="8" rx="4" fill="#262626" fill-opacity="0.55"/>
+  <rect x="196" y="190" width="40" height="8" rx="4" fill="#262626" fill-opacity="0.35"/>
+  <rect x="182" y="226" width="136" height="60" rx="12" fill="#FB923C" fill-opacity="0.85"/>
+  <rect x="196" y="246" width="70" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.8"/>
+  <rect x="196" y="260" width="44" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.6"/>
+  <rect x="182" y="300" width="136" height="44" rx="12" fill="#E5E5E5"/>
+  <rect x="196" y="318" width="60" height="8" rx="4" fill="#A3A3A3"/>
+  <rect x="196" y="370" width="108" height="40" rx="20" fill="#262626"/>
+  <path d="M236 390h28m-10-9l10 9-10 9" stroke="#FACC15" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- connection -->
+  <path d="M362 250 C 420 250, 440 200, 486 200" stroke="#A3A3A3" stroke-width="4" stroke-dasharray="4 12" stroke-linecap="round"/>
+  <circle cx="362" cy="250" r="7" fill="#FB923C"/>
+  <!-- service window -->
+  <rect x="490" y="110" width="250" height="210" rx="18" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="2"/>
+  <rect x="490" y="110" width="250" height="38" rx="18" fill="#E5E5E5"/>
+  <rect x="490" y="130" width="250" height="18" fill="#E5E5E5"/>
+  <circle cx="514" cy="129" r="6" fill="#FB923C"/>
+  <circle cx="534" cy="129" r="6" fill="#FACC15"/>
+  <circle cx="554" cy="129" r="6" fill="#A3A3A3"/>
+  <circle cx="560" cy="214" r="34" fill="#DCFCE7"/>
+  <path d="M543 214l12 12 22-24" stroke="#16A34A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="612" y="192" width="100" height="10" rx="5" fill="#404040"/>
+  <rect x="612" y="212" width="76" height="10" rx="5" fill="#A3A3A3"/>
+  <rect x="612" y="232" width="88" height="10" rx="5" fill="#D4D4D4"/>
+  <rect x="514" y="272" width="110" height="28" rx="14" fill="#FACC15"/>
+  <!-- shield -->
+  <path d="M640 360l52 20v38c0 32-22 56-52 66-30-10-52-34-52-66v-38l52-20z" fill="#262626"/>
+  <path d="M620 420l14 14 26-28" stroke="#FACC15" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

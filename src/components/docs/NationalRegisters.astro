@@ -1,0 +1,109 @@
+---
+// Renders national register status from src/data/national.ts, the same data
+// used by the /check/ self-assessment, so the two stay in sync.
+import { nationalEntries } from '../../data/national';
+
+const entries = [...nationalEntries].sort((a, b) => a.name.localeCompare(b.name, 'en'));
+const confirmed = entries.filter(e => e.status === 'confirmed');
+const fmt = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<p>
+  Tracked Member States: <strong>{entries.length}</strong>. Registrar confirmed in an adopted or published
+  national act: <strong>{confirmed.length}</strong>
+  {confirmed.length > 0 && <>({confirmed.map(e => e.name).join(', ')})</>}.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Member State</th>
+      <th scope="col">Status</th>
+      <th scope="col">Registrar, or who to check with</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      entries.map(e => (
+        <tr>
+          <td>
+            <a href={`#ms-${e.code.toLowerCase()}`}>{e.name}</a>
+          </td>
+          <td>{e.status === 'confirmed' ? 'Confirmed' : 'Not yet confirmed'}</td>
+          <td>
+            {e.status === 'confirmed' && e.registrar
+              ? e.registrar
+              : e.registrar
+                ? `Proposed: ${e.registrar} (not yet confirmed)`
+                : e.checkWith
+                  ? `Check with ${e.checkWith}`
+                  : 'No official source found yet'}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+{
+  entries.map(e => (
+    <section aria-labelledby={`ms-${e.code.toLowerCase()}`}>
+      <h3 id={`ms-${e.code.toLowerCase()}`}>
+        {e.name} ({e.code})
+      </h3>
+      <p>
+        <strong>Status:</strong>{' '}
+        {e.status === 'confirmed'
+          ? 'Registrar confirmed in an adopted or published national act.'
+          : 'National details not yet confirmed.'}
+      </p>
+      {e.registrar && (
+        <p>
+          <strong>{e.status === 'confirmed' ? 'Registrar:' : 'Registrar (proposed, not yet confirmed):'}</strong>{' '}
+          {e.registrar}
+        </p>
+      )}
+      {e.checkWith && (
+        <p>
+          <strong>Check with:</strong> {e.checkWith}
+        </p>
+      )}
+      {e.wallet && (
+        <p>
+          <strong>National wallet:</strong> {e.wallet}
+        </p>
+      )}
+      {e.notes.length > 0 && (
+        <ul>
+          {e.notes.map(n => (
+            <li>{n}</li>
+          ))}
+        </ul>
+      )}
+      <p>
+        <strong>Sources:</strong>{' '}
+        {e.sources.length === 0 ? (
+          'None found yet. Treat everything about this Member State as unverified.'
+        ) : (
+          e.sources.map((s, i) => (
+            <>
+              {i > 0 && '; '}
+              <a href={s.url} rel="noopener">
+                {s.label}
+              </a>
+            </>
+          ))
+        )}
+      </p>
+      <p>
+        <small>Sources last checked: {fmt(e.lastChecked)}</small>
+      </p>
+    </section>
+  ))
+}

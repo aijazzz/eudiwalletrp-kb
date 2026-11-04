@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import SecondaryCTA from '@components/ui/buttons/SecondaryCTA.astro';
+
+/**
+ * The home page's top banner: a soft opening line, one prominent call to
+ * action (the self-assessment) and a quieter link for visitors who already
+ * know they have to accept the wallet.
+ */
+interface Props {
+  line: string;
+  sub?: string;
+  btn: string;
+  btnURL: string;
+  knowLink?: string;
+  knowURL?: string;
+  src?: any;
+  alt?: string;
+}
+
+const { line, sub, btn, btnURL, knowLink, knowURL, src, alt } = Astro.props;
+---
+
+<section class="mx-auto max-w-[85rem] px-4 pt-10 pb-6 sm:px-6 lg:px-8 lg:pt-14 2xl:max-w-full">
+  <div class="grid gap-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 p-6 md:grid-cols-5 md:items-center md:p-10 lg:p-12 dark:border-neutral-700 dark:bg-neutral-800/60">
+    <div class="md:col-span-3">
+      <h1 class="text-2xl leading-snug font-medium tracking-tight text-balance text-neutral-700 sm:text-3xl lg:text-4xl dark:text-neutral-200">
+        {line}
+      </h1>
+      {sub && (
+        <p class="mt-4 text-base leading-relaxed text-pretty text-neutral-600 lg:w-11/12 dark:text-neutral-400">
+          {sub}
+        </p>
+      )}
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <PrimaryCTA title={btn} url={btnURL} />
+        {knowLink && knowURL && <SecondaryCTA title={knowLink} url={knowURL} />}
+      </div>
+    </div>
+    {src && alt && (
+      <div class="hidden md:col-span-2 md:block">
+        <div class="aspect-[4067/2576] w-full">
+          <Image
+            src={src}
+            alt={alt}
+            class="h-full w-full object-contain object-center"
+            draggable={'false'}
+            loading="eager"
+            fetchpriority="high"
+            width={600}
+            height={380}
+          />
+        </div>
+      </div>
+    )}
+  </div>
+</section>

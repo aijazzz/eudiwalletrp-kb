@@ -1,0 +1,49 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import CheckBanner from '@components/sections/landing/CheckBanner.astro';
+import HeroSectionAlt from '@components/sections/landing/HeroSectionAlt.astro';
+import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro';
+import heroImage from '@images/hero-wallet.svg';
+import { SITE } from '@data/constants';
+import { getCopy } from '@/copy';
+import { localePath, type MarketingLocale } from '@utils/locale';
+
+/** The home page. Copy comes from the locale's copy table. */
+interface Props {
+  locale: MarketingLocale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+const copy = t.home;
+---
+
+<MainLayout>
+  <CheckBanner
+    line={copy.banner.line}
+    sub={copy.banner.sub}
+    btn={copy.banner.btn}
+    btnURL={localePath(locale, '/check/')}
+    knowLink={copy.banner.knowLink}
+    knowURL="#start-here"
+    src={heroImage}
+    alt={copy.banner.imageAlt}
+  />
+
+  <div id="start-here" class="scroll-mt-24">
+  <FeaturesGeneral
+    title={copy.tasks.title}
+    subTitle={copy.tasks.subTitle}
+    features={copy.tasks.items.map(item => ({
+      ...item,
+      url: localePath(locale, item.url),
+    }))}
+  />
+  </div>
+
+  <HeroSectionAlt
+    title={copy.heroAlt.title}
+    subTitle={copy.heroAlt.subTitle}
+    url={SITE.repo}
+  />
+</MainLayout>
