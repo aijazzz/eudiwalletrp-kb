@@ -82,7 +82,7 @@ export const en = {
       btn: 'Check if you must',
       knowLink: 'I already know I must',
       imageAlt:
-        'Illustration of a digital wallet sharing a verified credential with a service',
+        'Illustration of a customer presenting a digital identity credential on a phone to a business, with acceptance indicated',
     },
     tasks: {
       title: 'Already know you must? Start here.',
