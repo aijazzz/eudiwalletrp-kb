@@ -76,6 +76,11 @@ export const en = {
   },
 
   home: {
+    meta: {
+      title: 'EUDI Wallet for relying parties: registration, eIDAS and deadlines',
+      description:
+        'Independent, plain-language guidance for EUDI Wallet relying parties: whether you must accept the wallet, registration, access certificates and deadlines.',
+    },
     banner: {
       line: 'Grab the opportunity EUDI Wallet is offering to your business',
       sub: 'Answer a few short questions to see whether eIDAS requires you to accept the European Digital Identity Wallet. It runs entirely in your browser and nothing is stored.',
@@ -87,7 +92,7 @@ export const en = {
     tasks: {
       title: 'Already know you must? Start here.',
       subTitle:
-        'Every relying party registers in the Member State where it is established before relying on the wallet. These guides walk you through registration, certificates and what comes next.',
+        'Every wallet-relying party registers in the Member State where it is established before relying on the wallet. These guides walk you through registration, access and registration certificates, and what comes next.',
       items: [
         {
           heading: 'How to register',

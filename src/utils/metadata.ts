@@ -62,9 +62,9 @@ export interface PageMetadata {
   jsonLd: Record<string, unknown>;
 }
 
-/** Absolute URL on the marketing site; the root has no trailing slash. */
+/** Absolute URL on the marketing site (the root keeps its trailing slash, matching the sitemap). */
 export function absoluteUrl(path: string): string {
-  return path === '/' ? SITE.url : `${SITE.url}${path}`;
+  return `${SITE.url}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
@@ -78,7 +78,7 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
     input.ogTitle ??
     (input.title && input.section
       ? `${input.title} | ${input.section} | ${SITE.title}`
-      : copy.site.ogTitle);
+      : (input.title ?? copy.site.ogTitle));
   const ogDescription = input.description ?? copy.site.ogDescription;
   const canonical = absoluteUrl(pathname);
 

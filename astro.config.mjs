@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 
 import mdx from '@astrojs/mdx';
+import { NOINDEX_PATHS } from './src/data_files/seo.ts';
 
 const SITE_URL = 'https://eudiwalletrp.com';
 
@@ -12,7 +13,11 @@ export default defineConfig({
   site: SITE_URL,
   prefetch: true,
   integrations: [
-    sitemap(),
+    sitemap({
+      // Placeholder pages are noindex and stay out of the sitemap.
+      filter: page =>
+        !NOINDEX_PATHS.includes(new URL(page).pathname),
+    }),
     starlight({
       title: 'EUDI Wallet RP Knowledge Base',
       // https://starlight.astro.build/guides/sidebar/
@@ -101,15 +106,8 @@ export default defineConfig({
         ThemeSelect: './src/components/ui/starlight/ThemeSelect.astro',
         Footer: './src/components/ui/starlight/Footer.astro',
       },
+      routeMiddleware: './src/starlightRouteData.ts',
       head: [
-        {
-          tag: 'meta',
-          attrs: { property: 'og:image', content: SITE_URL + '/social.png' },
-        },
-        {
-          tag: 'meta',
-          attrs: { name: 'twitter:image', content: SITE_URL + '/social.png' },
-        },
         {
           tag: 'link',
           attrs: {

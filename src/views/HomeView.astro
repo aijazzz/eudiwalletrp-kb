@@ -18,7 +18,7 @@ const t = getCopy(locale);
 const copy = t.home;
 ---
 
-<MainLayout>
+<MainLayout title={copy.meta.title} description={copy.meta.description}>
   <CheckBanner
     line={copy.banner.line}
     sub={copy.banner.sub}
