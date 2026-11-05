@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import { OG, SITE } from '@data/constants';
 import faviconSvgSrc from '@images/icon.svg';
+import faviconSvgDarkSrc from '@images/icon-dark.svg';
 import faviconSrc from '@images/icon.png';
 import type { PageMetadata } from '@utils/metadata';
 
@@ -24,6 +25,7 @@ const socialImageRes = await getImage({
 const socialImage = Astro.url.origin + socialImageRes.src;
 
 const faviconSvg = await getImage({ src: faviconSvgSrc, format: 'svg' });
+const faviconSvgDark = await getImage({ src: faviconSvgDarkSrc, format: 'svg' });
 const appleTouchIcon = await getImage({
   src: faviconSrc,
   width: 180,
@@ -75,8 +77,22 @@ const appleTouchIcon = await getImage({
 <link rel="manifest" href="/manifest.json" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link href="/favicon.ico" rel="icon" sizes="any" type="image/x-icon" />
-<link href={faviconSvg.src} rel="icon" type="image/svg+xml" sizes="any" />
+<link
+  href={faviconSvg.src}
+  rel="icon"
+  type="image/svg+xml"
+  sizes="any"
+  media="(prefers-color-scheme: light)"
+/>
+<link
+  href={faviconSvgDark.src}
+  rel="icon"
+  type="image/svg+xml"
+  sizes="any"
+  media="(prefers-color-scheme: dark)"
+/>
 <meta name="mobile-web-app-capable" content="yes" />
 <link href={appleTouchIcon.src} rel="apple-touch-icon" />
 <link href={appleTouchIcon.src} rel="shortcut icon" />
-<meta name="theme-color" content="#facc15" />
+<meta name="theme-color" content="#F2B33D" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0B1633" media="(prefers-color-scheme: dark)" />

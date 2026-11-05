@@ -1,5 +1,6 @@
 ---
 import mark from '@images/starlight/mark.svg?raw';
+import markDark from '@images/starlight/mark-dark.svg?raw';
 import type { Props } from '@astrojs/starlight/props';
 
 const main = '/';
@@ -8,7 +9,8 @@ const docs = '/getting-started/';
 
 <span class="site-title flex">
   <a class="main-logo flex" href={main} aria-label="EUDI Wallet RP Knowledge Base home">
-    <span class="mark" set:html={mark} />
+    <span class="mark mark-light" set:html={mark} />
+    <span class="mark mark-dark" set:html={markDark} />
     <span class="wordmark">EUDI Wallet RP</span>
   </a>
   <a class="docs-logo" href={docs}>Docs</a>
@@ -34,6 +36,15 @@ const docs = '/getting-started/';
   .mark :global(svg) {
     width: 2rem;
     height: 2rem;
+  }
+  .mark-dark {
+    display: none;
+  }
+  :global([data-theme='dark']) .mark-light {
+    display: none;
+  }
+  :global([data-theme='dark']) .mark-dark {
+    display: block;
   }
   .wordmark {
     font-weight: 700;
