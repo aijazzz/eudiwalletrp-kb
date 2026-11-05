@@ -110,6 +110,26 @@ export default defineConfig({
           tag: 'meta',
           attrs: { name: 'twitter:image', content: SITE_URL + '/social.png' },
         },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'icon',
+            href: '/favicon.svg',
+            type: 'image/svg+xml',
+            sizes: 'any',
+            media: '(prefers-color-scheme: light)',
+          },
+        },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'icon',
+            href: '/favicon-dark.svg',
+            type: 'image/svg+xml',
+            sizes: 'any',
+            media: '(prefers-color-scheme: dark)',
+          },
+        },
       ],
     }),
     mdx(),
